@@ -1,0 +1,260 @@
+// Interface que define o contrato comum para todos os impostos
+interface Imposto {
+    // Método para calcular o valor do imposto - deve ser implementado por todas as classes
+    double calcularImposto();
+    
+    // Método para obter a descrição do imposto - deve ser implementado por todas as classes
+    String getDescricao();
+}
+
+// Classe abstrata que implementa a interface Imposto
+// Fornece uma base comum para impostos, mesmo que não haja atributos comuns
+abstract class ImpostoBase implements Imposto {
+    // Atributo protegido para a descrição do imposto
+    protected String descricao;
+    
+    // Construtor da classe abstrata - inicializa a descrição
+    public ImpostoBase(String descricao) {
+        this.descricao = descricao;
+    }
+    
+    // Implementação do método getDescricao - comum a todos os impostos
+    @Override
+    public String getDescricao() {
+        return descricao;
+    }
+    
+    // Método abstrato que deve ser implementado pelas classes filhas
+    @Override
+    public abstract double calcularImposto();
+}
+
+// Classe para o imposto PIS - herda de ImpostoBase
+class ImpostoPIS extends ImpostoBase {
+    // Atributos específicos do PIS - encapsulados como privados
+    private double valorDebito;
+    private double valorCredito;
+    
+    // Constante para a alíquota fixa do PIS (1,65%)
+    private static final double ALIQUOTA_PIS = 1.65;
+    
+    // Construtor da classe PIS - chama o construtor da classe pai e inicializa atributos
+    public ImpostoPIS(double valorDebito, double valorCredito) {
+        super("PIS"); // Chama o construtor da classe pai com a descrição
+        this.valorDebito = valorDebito;
+        this.valorCredito = valorCredito;
+    }
+    
+    // Métodos getter para encapsulamento - permitem acesso controlado aos atributos
+    public double getValorDebito() {
+        return valorDebito;
+    }
+    
+    public double getValorCredito() {
+        return valorCredito;
+    }
+    
+    // Métodos setter para encapsulamento - permitem modificação controlada dos atributos
+    public void setValorDebito(double valorDebito) {
+        this.valorDebito = valorDebito;
+    }
+    
+    public void setValorCredito(double valorCredito) {
+        this.valorCredito = valorCredito;
+    }
+    
+    // Implementação do método abstrato - calcula o PIS conforme a fórmula específica
+    @Override
+    public double calcularImposto() {
+        // Fórmula: (débito - crédito) * 1,65%
+        double baseCalculo = valorDebito - valorCredito;
+        return baseCalculo * (ALIQUOTA_PIS / 100);
+    }
+    
+    // Método para obter detalhes do cálculo - útil para depuração e relatórios
+    public String getDetalhesCalculo() {
+        double baseCalculo = valorDebito - valorCredito;
+        return String.format("Base de Cálculo: R$ %.2f (Débito: R$ %.2f - Crédito: R$ %.2f) x %.2f%%", 
+                           baseCalculo, valorDebito, valorCredito, ALIQUOTA_PIS);
+    }
+}
+
+// Classe para o imposto IPI - herda de ImpostoBase
+class ImpostoIPI extends ImpostoBase {
+    // Atributos específicos do IPI - encapsulados como privados
+    private double valorProduto;
+    private double valorFrete;
+    private double valorSeguro;
+    private double outrasDesp;
+    private double aliquota; // Alíquota variável para o IPI
+    
+    // Construtor da classe IPI - inicializa todos os valores necessários
+    public ImpostoIPI(double valorProduto, double valorFrete, double valorSeguro, 
+                     double outrasDesp, double aliquota) {
+        super("IPI"); // Chama o construtor da classe pai com a descrição
+        this.valorProduto = valorProduto;
+        this.valorFrete = valorFrete;
+        this.valorSeguro = valorSeguro;
+        this.outrasDesp = outrasDesp;
+        this.aliquota = aliquota;
+    }
+    
+    // Métodos getter para encapsulamento
+    public double getValorProduto() {
+        return valorProduto;
+    }
+    
+    public double getValorFrete() {
+        return valorFrete;
+    }
+    
+    public double getValorSeguro() {
+        return valorSeguro;
+    }
+    
+    public double getOutrasDesp() {
+        return outrasDesp;
+    }
+    
+    public double getAliquota() {
+        return aliquota;
+    }
+    
+    // Métodos setter para encapsulamento
+    public void setValorProduto(double valorProduto) {
+        this.valorProduto = valorProduto;
+    }
+    
+    public void setValorFrete(double valorFrete) {
+        this.valorFrete = valorFrete;
+    }
+    
+    public void setValorSeguro(double valorSeguro) {
+        this.valorSeguro = valorSeguro;
+    }
+    
+    public void setOutrasDesp(double outrasDesp) {
+        this.outrasDesp = outrasDesp;
+    }
+    
+    public void setAliquota(double aliquota) {
+        this.aliquota = aliquota;
+    }
+    
+    // Método auxiliar para calcular a base de cálculo do IPI
+    private double calcularBaseCalculo() {
+        // Base de cálculo = valor produto + frete + seguro + outras despesas
+        return valorProduto + valorFrete + valorSeguro + outrasDesp;
+    }
+    
+    // Implementação do método abstrato - calcula o IPI conforme a fórmula específica
+    @Override
+    public double calcularImposto() {
+        // Fórmula: base de cálculo * alíquota
+        double baseCalculo = calcularBaseCalculo();
+        return baseCalculo * (aliquota / 100);
+    }
+    
+    // Método para obter detalhes do cálculo - útil para depuração e relatórios
+    public String getDetalhesCalculo() {
+        double baseCalculo = calcularBaseCalculo();
+        return String.format("Base de Cálculo: R$ %.2f (Produto: R$ %.2f + Frete: R$ %.2f + Seguro: R$ %.2f + Outras: R$ %.2f) x %.2f%%", 
+                           baseCalculo, valorProduto, valorFrete, valorSeguro, outrasDesp, aliquota);
+    }
+}
+
+// Classe Pagamentos - gerencia uma lista de impostos para uma empresa
+class Pagamentos {
+    // Atributos da classe - encapsulados como privados
+    private String nomeEmpresa;
+    private java.util.List<Imposto> listaImpostos; // Lista polimórfica que pode conter qualquer tipo de imposto
+    
+    // Construtor da classe Pagamentos
+    public Pagamentos(String nomeEmpresa) {
+        this.nomeEmpresa = nomeEmpresa;
+        // Inicializa a lista de impostos como ArrayList vazia
+        this.listaImpostos = new java.util.ArrayList<>();
+    }
+    
+    // Construtor alternativo sem parâmetros
+    public Pagamentos() {
+        this(""); // Chama o construtor principal com string vazia
+        this.listaImpostos = new java.util.ArrayList<>();
+    }
+    
+    // Métodos getter e setter para encapsulamento
+    public String getNomeEmpresa() {
+        return nomeEmpresa;
+    }
+    
+    public void setNomeEmpresa(String nomeEmpresa) {
+        this.nomeEmpresa = nomeEmpresa;
+    }
+    
+    public java.util.List<Imposto> getListaImpostos() {
+        return listaImpostos;
+    }
+    
+    // Método para adicionar um imposto à lista (polimorfismo em ação)
+    public void adicionarImposto(Imposto imposto) {
+        listaImpostos.add(imposto);
+        System.out.println("Imposto " + imposto.getDescricao() + " adicionado com sucesso!");
+    }
+    
+    // Método para remover um imposto da lista por índice
+    public boolean removerImposto(int indice) {
+        if (indice >= 0 && indice < listaImpostos.size()) {
+            Imposto removido = listaImpostos.remove(indice);
+            System.out.println("Imposto " + removido.getDescricao() + " removido com sucesso!");
+            return true;
+        }
+        return false;
+    }
+    
+    // Método para calcular o total de todos os impostos
+    public double calcularTotalImpostos() {
+        double total = 0.0;
+        // Percorre todos os impostos e soma seus valores (polimorfismo)
+        for (Imposto imposto : listaImpostos) {
+            total += imposto.calcularImposto(); // Chama o método correto para cada tipo
+        }
+        return total;
+    }
+    
+    // Método para mostrar todos os impostos cadastrados
+    public void mostrarImpostos() {
+        if (listaImpostos.isEmpty()) {
+            System.out.println("Nenhum imposto cadastrado.");
+            return;
+        }
+        
+        System.out.println("\n=== IMPOSTOS CADASTRADOS PARA: " + nomeEmpresa + " ===");
+        
+        // Percorre a lista e mostra detalhes de cada imposto (polimorfismo)
+        for (int i = 0; i < listaImpostos.size(); i++) {
+            Imposto imposto = listaImpostos.get(i);
+            System.out.println("\n--- Imposto " + (i + 1) + " ---");
+            System.out.println("Tipo: " + imposto.getDescricao());
+            System.out.println("Valor Calculado: R$ " + String.format("%.2f", imposto.calcularImposto()));
+            
+            // Mostra detalhes específicos se disponíveis (casting seguro)
+            if (imposto instanceof ImpostoPIS) {
+                ImpostoPIS pis = (ImpostoPIS) imposto;
+                System.out.println("Detalhes: " + pis.getDetalhesCalculo());
+            } else if (imposto instanceof ImpostoIPI) {
+                ImpostoIPI ipi = (ImpostoIPI) imposto;
+                System.out.println("Detalhes: " + ipi.getDetalhesCalculo());
+            }
+        }
+        
+        // Mostra o total geral
+        System.out.println("\n=== RESUMO ===");
+        System.out.println("Total de impostos cadastrados: " + listaImpostos.size());
+        System.out.println("Valor total dos impostos: R$ " + String.format("%.2f", calcularTotalImpostos()));
+    }
+    
+    // Método para obter quantidade de impostos cadastrados
+    public int getQuantidadeImpostos() {
+        return listaImpostos.size();
+    }
+}

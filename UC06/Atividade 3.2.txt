@@ -1,0 +1,193 @@
+import java.util.Scanner;
+
+public class SistemaImpostos {
+    public static void main(String[] args) {
+        // Criando scanner para entrada de dados do usuário
+        Scanner scanner = new Scanner(System.in);
+        
+        System.out.println("=== SISTEMA DE CÁLCULO DE IMPOSTOS ===");
+        
+        // Solicitando nome da empresa
+        System.out.print("Informe o nome da empresa: ");
+        String nomeEmpresa = scanner.nextLine();
+        
+        // Criando objeto Pagamentos para a empresa
+        Pagamentos pagamentos = new Pagamentos(nomeEmpresa);
+        
+        System.out.println("\nEmpresa cadastrada: " + nomeEmpresa);
+        System.out.println("Agora vamos cadastrar os impostos...");
+        
+        // Loop principal para cadastro de impostos
+        while (true) {
+            System.out.println("\n=== CADASTRO DE IMPOSTOS ===");
+            System.out.println("Tipos disponíveis:");
+            System.out.println("1 - PIS (Programa de Integração Social)");
+            System.out.println("2 - IPI (Imposto sobre Produtos Industrializados)");
+            System.out.println("Digite 'pare' para encerrar o cadastramento");
+            
+            System.out.print("Escolha o tipo de imposto (1, 2 ou 'pare'): ");
+            String opcao = scanner.nextLine().toLowerCase();
+            
+            // Verifica se o usuário quer parar o cadastramento
+            if (opcao.equals("pare")) {
+                System.out.println("Cadastramento de impostos encerrado.");
+                break;
+            }
+            
+            // Processa a escolha do usuário
+            try {
+                int tipoImposto = Integer.parseInt(opcao);
+                
+                switch (tipoImposto) {
+                    case 1:
+                        // Cadastrando PIS
+                        cadastrarPIS(scanner, pagamentos);
+                        break;
+                        
+                    case 2:
+                        // Cadastrando IPI
+                        cadastrarIPI(scanner, pagamentos);
+                        break;
+                        
+                    default:
+                        System.out.println("Opção inválida! Escolha 1, 2 ou digite 'pare'.");
+                        break;
+                }
+            } catch (NumberFormatException e) {
+                // Tratamento de erro quando não é um número válido
+                System.out.println("Entrada inválida! Digite um número (1 ou 2) ou 'pare'.");
+            }
+        }
+        
+        // Mostrando resultados finais
+        System.out.println("\n" + "=".repeat(50));
+        System.out.println("PROCESSAMENTO FINALIZADO");
+        System.out.println("=".repeat(50));
+        
+        // Verificando se há impostos cadastrados
+        if (pagamentos.getQuantidadeImpostos() == 0) {
+            System.out.println("Nenhum imposto foi cadastrado para a empresa " + nomeEmpresa);
+        } else {
+            // Mostrando todos os impostos cadastrados e seus cálculos
+            pagamentos.mostrarImpostos();
+        }
+        
+        // Fechando o scanner
+        scanner.close();
+        System.out.println("\nSistema encerrado!");
+    }
+    
+    // Método auxiliar para cadastrar imposto PIS
+    private static void cadastrarPIS(Scanner scanner, Pagamentos pagamentos) {
+        System.out.println("\n--- CADASTRO PIS ---");
+        System.out.println("O PIS é calculado como: (Débito - Crédito) x 1,65%");
+        
+        try {
+            // Coletando valor de débito
+            System.out.print("Informe o valor total de débito (R$): ");
+            double valorDebito = Double.parseDouble(scanner.nextLine());
+            
+            // Validação do valor de débito
+            if (valorDebito < 0) {
+                System.out.println("Erro: O valor de débito não pode ser negativo!");
+                return;
+            }
+            
+            // Coletando valor de crédito
+            System.out.print("Informe o valor total de crédito (R$): ");
+            double valorCredito = Double.parseDouble(scanner.nextLine());
+            
+            // Validação do valor de crédito
+            if (valorCredito < 0) {
+                System.out.println("Erro: O valor de crédito não pode ser negativo!");
+                return;
+            }
+            
+            // Criando objeto ImpostoPIS com os valores informados
+            ImpostoPIS pis = new ImpostoPIS(valorDebito, valorCredito);
+            
+            // Adicionando o imposto à lista de pagamentos (polimorfismo)
+            pagamentos.adicionarImposto(pis);
+            
+            // Mostrando preview do cálculo
+            System.out.println("Preview: " + pis.getDetalhesCalculo());
+            System.out.println("Valor do PIS: R$ " + String.format("%.2f", pis.calcularImposto()));
+            
+        } catch (NumberFormatException e) {
+            // Tratamento de erro para valores inválidos
+            System.out.println("Erro: Valor inválido! Digite apenas números.");
+        }
+    }
+    
+    // Método auxiliar para cadastrar imposto IPI
+    private static void cadastrarIPI(Scanner scanner, Pagamentos pagamentos) {
+        System.out.println("\n--- CADASTRO IPI ---");
+        System.out.println("O IPI é calculado como: (Produto + Frete + Seguro + Outras Despesas) x Alíquota%");
+        
+        try {
+            // Coletando valor do produto
+            System.out.print("Informe o valor do produto (R$): ");
+            double valorProduto = Double.parseDouble(scanner.nextLine());
+            
+            // Validação do valor do produto
+            if (valorProduto < 0) {
+                System.out.println("Erro: O valor do produto não pode ser negativo!");
+                return;
+            }
+            
+            // Coletando valor do frete
+            System.out.print("Informe o valor do frete (R$): ");
+            double valorFrete = Double.parseDouble(scanner.nextLine());
+            
+            // Validação do valor do frete
+            if (valorFrete < 0) {
+                System.out.println("Erro: O valor do frete não pode ser negativo!");
+                return;
+            }
+            
+            // Coletando valor do seguro
+            System.out.print("Informe o valor do seguro (R$): ");
+            double valorSeguro = Double.parseDouble(scanner.nextLine());
+            
+            // Validação do valor do seguro
+            if (valorSeguro < 0) {
+                System.out.println("Erro: O valor do seguro não pode ser negativo!");
+                return;
+            }
+            
+            // Coletando outras despesas
+            System.out.print("Informe outras despesas (R$): ");
+            double outrasDesp = Double.parseDouble(scanner.nextLine());
+            
+            // Validação de outras despesas
+            if (outrasDesp < 0) {
+                System.out.println("Erro: O valor de outras despesas não pode ser negativo!");
+                return;
+            }
+            
+            // Coletando alíquota
+            System.out.print("Informe a alíquota (%): ");
+            double aliquota = Double.parseDouble(scanner.nextLine());
+            
+            // Validação da alíquota
+            if (aliquota < 0 || aliquota > 100) {
+                System.out.println("Erro: A alíquota deve estar entre 0% e 100%!");
+                return;
+            }
+            
+            // Criando objeto ImpostoIPI com os valores informados
+            ImpostoIPI ipi = new ImpostoIPI(valorProduto, valorFrete, valorSeguro, outrasDesp, aliquota);
+            
+            // Adicionando o imposto à lista de pagamentos (polimorfismo)
+            pagamentos.adicionarImposto(ipi);
+            
+            // Mostrando preview do cálculo
+            System.out.println("Preview: " + ipi.getDetalhesCalculo());
+            System.out.println("Valor do IPI: R$ " + String.format("%.2f", ipi.calcularImposto()));
+            
+        } catch (NumberFormatException e) {
+            // Tratamento de erro para valores inválidos
+            System.out.println("Erro: Valor inválido! Digite apenas números.");
+        }
+    }
+}

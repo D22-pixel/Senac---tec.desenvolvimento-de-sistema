@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resumo da Atividade - Sistema Agência de Viagens</title>
+    <style>
+        @media print {
+            body { margin: 0; }
+            .no-print { display: none; }
+            .page-break { page-break-before: always; }
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+            color: #333;
+            background-color: #f8f9fa;
+        }
+        
+        .container {
+            max-width: 210mm;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            border-radius: 8px;
+        }
+        
+        .header {
+            text-align: center;
+            border-bottom: 3px solid #007bff;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .header h1 {
+            color: #007bff;
+            font-size: 28px;
+            margin: 0;
+            font-weight: bold;
+        }
+        
+        .header p {
+            color: #666;
+            font-size: 16px;
+            margin: 10px 0 0 0;
+        }
+        
+        h2 {
+            color: #007bff;
+            border-left: 4px solid #007bff;
+            padding-left: 15px;
+            margin-top: 30px;
+            font-size: 20px;
+        }
+        
+        h3 {
+            color: #0056b3;
+            margin-top: 25px;
+            font-size: 18px;
+        }
+        
+        h4 {
+            color: #495057;
+            margin-top: 20px;
+            font-size: 16px;
+        }
+        
+        .objective-box {
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 5px solid #2196f3;
+            margin: 20px 0;
+        }
+        
+        .class-box {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        
+        .example-box {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 6px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        
+        .calculation-box {
+            background: #e8f5e8;
+            border: 1px solid #c3e6c3;
+            border-radius: 6px;
+            padding: 15px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .tips-box {
+            background: #f0f8ff;
+            border: 1px solid #b3d9ff;
+            border-radius: 6px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        
+        ul, ol {
+            padding-left: 25px;
+        }
+        
+        li {
+            margin-bottom: 8px;
+        }
+        
+        .code-block {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 4px;
+            padding: 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            overflow-x: auto;
+            margin: 15px 0;
+        }
+        
+        .highlight {
+            background: #fff3cd;
+            padding: 2px 6px;
+            border-radius: 3px;
+        }
+        
+        .button-container {
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px;
+        }
+        
+        .pdf-button {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a52);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(238, 90, 82, 0.4);
+            transition: all 0.3s ease;
+        }
+        
+        .pdf-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(238, 90, 82, 0.6);
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 2px solid #dee2e6;
+            color: #666;
+            font-size: 14px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+        
+        table, th, td {
+            border: 1px solid #dee2e6;
+        }
+        
+        th, td {
+            padding: 12px;
+            text-align: left;
+        }
+        
+        th {
+            background-color: #f8f9fa;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📚 Sistema Agência de Viagens</h1>
+            <p>Atividade de Programação Orientada a Objetos - Java</p>
+        </div>
+
+        <div class="button-container no-print">
+            <button class="pdf-button" onclick="window.print()">📄 Gerar PDF</button>
+        </div>
+
+        <div class="objective-box">
+            <h2>🎯 Objetivo da Atividade</h2>
+            <p><strong>Desenvolver um sistema orientado a objetos</strong> em Java para uma agência de viagens que gerencie pacotes de viagem e vendas, aplicando conceitos fundamentais de POO como encapsulamento, composição e responsabilidades bem definidas.</p>
+        </div>
+
+        <h2>📋 Explicação Detalhada</h2>
+        
+        <h3>🏗️ Estrutura do Sistema</h3>
+        
+        <div class="class-box">
+            <h4>1. Classe Transporte</h4>
+            <ul>
+                <li><strong>Atributos:</strong> tipo (String) e valor (double)</li>
+                <li><strong>Função:</strong> Representa o meio de locomoção do pacote</li>
+                <li><strong>Exemplos:</strong> aéreo, rodoviário, marítimo</li>
+            </ul>
+        </div>
+
+        <div class="class-box">
+            <h4>2. Classe Hospedagem</h4>
+            <ul>
+                <li><strong>Atributos:</strong> descrição (String) e valorDiaria (double)</li>
+                <li><strong>Função:</strong> Representa onde o cliente ficará hospedado</li>
+                <li><strong>Exemplos:</strong> "Hotel 5 estrelas", "Pousada simples"</li>
+            </ul>
+        </div>
+
+        <div class="class-box">
+            <h4>3. Classe PacoteViagem</h4>
+            <ul>
+                <li><strong>Composição:</strong> contém um Transporte e uma Hospedagem</li>
+                <li><strong>Atributos adicionais:</strong> destino, quantidade de dias</li>
+                <li><strong>Métodos principais:</strong>
+                    <ul>
+                        <li>calcularTotalHospedagem()</li>
+                        <li>calcularValorComLucro()</li>
+                        <li>calcularTotalPacote()</li>
+                    </ul>
+                </li>
+                <li><strong>Importante:</strong> Todos os valores em dólar</li>
+            </ul>
+        </div>
+
+        <div class="class-box">
+            <h4>4. Classe Venda</h4>
+            <ul>
+                <li><strong>Atributos:</strong> nomeCliente, formaPagamento, pacote</li>
+                <li><strong>Função principal:</strong> Converter valores de dólar para real</li>
+                <li><strong>Método chave:</strong> converterDolarParaReal()</li>
+            </ul>
+        </div>
+
+        <div class="class-box">
+            <h4>5. Classe Principal (Main)</h4>
+            <ul>
+                <li>Interface com usuário via console</li>
+                <li>Coleta dados e cria objetos</li>
+                <li>Exibe resultados formatados</li>
+            </ul>
+        </div>
+
+        <div class="page-break"></div>
+
+        <h2>💡 Exemplos Práticos</h2>
+
+        <div class="example-box">
+            <h3>Exemplo 1: Viagem para Paris</h3>
+            <table>
+                <tr><th>Item</th><th>Valor</th></tr>
+                <tr><td>Transporte (aéreo)</td><td>$800.00</td></tr>
+                <tr><td>Hospedagem (Hotel 5★, 7 dias × $150)</td><td>$1.050.00</td></tr>
+                <tr><td>Subtotal</td><td>$1.850.00</td></tr>
+                <tr><td>Margem de lucro (15%)</td><td>$277.50</td></tr>
+                <tr><td>Taxas adicionais</td><td>$50.00</td></tr>
+                <tr><td><strong>Total USD</strong></td><td><strong>$2.177.50</strong></td></tr>
+                <tr><td><strong>Total BRL (cotação R$5.20)</strong></td><td><strong>R$11.323.00</strong></td></tr>
+            </table>
+        </div>
+
+        <div class="example-box">
+            <h3>Exemplo 2: Viagem para Cancún</h3>
+            <table>
+                <tr><th>Item</th><th>Valor</th></tr>
+                <tr><td>Transporte (aéreo)</td><td>$600.00</td></tr>
+                <tr><td>Hospedagem (Resort All Inclusive, 5 dias × $200)</td><td>$1.000.00</td></tr>
+                <tr><td>Subtotal</td><td>$1.600.00</td></tr>
+                <tr><td>Margem de lucro (20%)</td><td>$320.00</td></tr>
+                <tr><td>Taxas adicionais</td><td>$75.00</td></tr>
+                <tr><td><strong>Total USD</strong></td><td><strong>$1.995.00</strong></td></tr>
+                <tr><td><strong>Total BRL (cotação R$5.10)</strong></td><td><strong>R$10.174.50</strong></td></tr>
+            </table>
+        </div>
+
+        <h2>🔧 Conceitos POO Aplicados</h2>
+
+        <div class="tips-box">
+            <h3>1. Encapsulamento</h3>
+            <ul>
+                <li>Atributos privados com métodos getter/setter</li>
+                <li>Controle de acesso aos dados das classes</li>
+            </ul>
+
+            <h3>2. Composição</h3>
+            <ul>
+                <li>PacoteViagem "tem um" Transporte</li>
+                <li>PacoteViagem "tem uma" Hospedagem</li>
+                <li>Venda "tem um" PacoteViagem</li>
+            </ul>
+
+            <h3>3. Responsabilidade Única</h3>
+            <ul>
+                <li>Cada classe tem uma função específica bem definida</li>
+                <li>Separação clara entre lógica de negócio e apresentação</li>
+            </ul>
+
+            <h3>4. Construtores</h3>
+            <ul>
+                <li>Facilitam a criação e inicialização dos objetos</li>
+                <li>Garantem que objetos sejam criados em estado válido</li>
+            </ul>
+        </div>
+
+        <h2>📝 Fórmulas de Cálculo</h2>
+
+        <div class="calculation-box">
+            <h4>Cálculos Principais:</h4>
+            <p><strong>Total Hospedagem =</strong> valor_diaria × quantidade_dias</p>
+            <p><strong>Margem de Lucro =</strong> subtotal × (margem_percentual ÷ 100)</p>
+            <p><strong>Subtotal =</strong> valor_transporte + total_hospedagem</p>
+            <p><strong>Total Pacote =</strong> subtotal + margem_lucro + taxas_adicionais</p>
+            <p><strong>Valor em Real =</strong> valor_dolar × cotacao_dolar</p>
+        </div>
+
+        <h2>🚀 Dicas de Implementação</h2>
+
+        <div class="tips-box">
+            <h3>Melhorias Sugeridas:</h3>
+            <ol>
+                <li><strong>Validações:</strong> Verificar valores negativos e dados inválidos</li>
+                <li><strong>Formatação:</strong> Usar DecimalFormat para melhor apresentação</li>
+                <li><strong>Tratamento de Erros:</strong> Implementar try-catch para entrada de dados</li>
+                <li><strong>Interfaces:</strong> Criar interfaces para diferentes tipos de pacotes</li>
+                <li><strong>Enum:</strong> Usar enum para tipos de transporte e formas de pagamento</li>
+            </ol>
+
+            <h3>Estrutura de Arquivos:</h3>
+            <ul>
+                <li>Transporte.java</li>
+                <li>Hospedagem.java</li>
+                <li>PacoteViagem.java</li>
+                <li>Venda.java</li>
+                <li>SistemaAgenciaViagens.java (classe principal)</li>
+            </ul>
+        </div>
+
+        <h2>📊 Fluxo de Execução</h2>
+
+        <div class="calculation-box">
+            <h4>Sequência de Passos:</h4>
+            <ol>
+                <li>Coletar dados do transporte (tipo, valor)</li>
+                <li>Coletar dados da hospedagem (descrição, valor diária)</li>
+                <li>Coletar dados do pacote (destino, dias, margem, taxas)</li>
+                <li>Criar objetos Transporte, Hospedagem e PacoteViagem</li>
+                <li>Exibir informações do pacote criado</li>
+                <li>Coletar dados da venda (cliente, pagamento, cotação)</li>
+                <li>Criar objeto Venda</li>
+                <li>Exibir resumo completo com valores em USD e BRL</li>
+            </ol>
+        </div>
+
+        <div class="footer">
+            <p>📚 Material de estudo - Programação Orientada a Objetos</p>
+            <p>Sistema desenvolvido para fins educacionais</p>
+        </div>
+    </div>
+</body>
+</html>

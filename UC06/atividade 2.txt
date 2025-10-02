@@ -1,0 +1,174 @@
+// Classe abstrata Funcionario - serve como base para todos os tipos de funcionários
+abstract class Funcionario {
+    // Atributos protegidos - podem ser acessados pelas classes filhas
+    protected String nome;
+    protected String cpf;
+    protected String endereco;
+    protected String telefone;
+    protected String setor;
+    
+    // Construtor da classe abstrata - inicializa os atributos comuns
+    public Funcionario(String nome, String cpf, String endereco, String telefone, String setor) {
+        this.nome = nome;
+        this.cpf = cpf;
+        this.endereco = endereco;
+        this.telefone = telefone;
+        this.setor = setor;
+    }
+    
+    // Métodos getters - encapsulamento para acesso controlado aos atributos
+    public String getNome() {
+        return nome;
+    }
+    
+    public String getCpf() {
+        return cpf;
+    }
+    
+    public String getEndereco() {
+        return endereco;
+    }
+    
+    public String getTelefone() {
+        return telefone;
+    }
+    
+    public String getSetor() {
+        return setor;
+    }
+    
+    // Métodos setters - encapsulamento para modificação controlada dos atributos
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+    
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
+    }
+    
+    public void setEndereco(String endereco) {
+        this.endereco = endereco;
+    }
+    
+    public void setTelefone(String telefone) {
+        this.telefone = telefone;
+    }
+    
+    public void setSetor(String setor) {
+        this.setor = setor;
+    }
+    
+    // Método para mostrar dados do funcionário - comum a todos os tipos
+    public void mostrarDados() {
+        System.out.println("Nome: " + nome);
+        System.out.println("CPF: " + cpf);
+        System.out.println("Endereço: " + endereco);
+        System.out.println("Telefone: " + telefone);
+        System.out.println("Setor: " + setor);
+    }
+    
+    // Método abstrato - deve ser implementado pelas classes filhas (polimorfismo)
+    public abstract double calcularSalario();
+    
+    // Método abstrato para aplicar aumento - implementação específica para cada tipo
+    public abstract void aplicarAumento(double percentual);
+}
+
+// Classe FuncionarioAssalariado - herda de Funcionario
+class FuncionarioAssalariado extends Funcionario {
+    // Atributo específico do funcionário assalariado
+    private double salarioMensal;
+    
+    // Construtor - chama o construtor da classe pai (super) e inicializa salário
+    public FuncionarioAssalariado(String nome, String cpf, String endereco, String telefone, 
+                                String setor, double salarioMensal) {
+        super(nome, cpf, endereco, telefone, setor); // Chama construtor da classe pai
+        this.salarioMensal = salarioMensal;
+    }
+    
+    // Getter e setter para salário mensal - encapsulamento
+    public double getSalarioMensal() {
+        return salarioMensal;
+    }
+    
+    public void setSalarioMensal(double salarioMensal) {
+        this.salarioMensal = salarioMensal;
+    }
+    
+    // Implementação do método abstrato - retorna o salário mensal
+    @Override
+    public double calcularSalario() {
+        return salarioMensal;
+    }
+    
+    // Implementação do método abstrato - aplica aumento percentual no salário
+    @Override
+    public void aplicarAumento(double percentual) {
+        // Calcula o novo salário com o aumento percentual
+        salarioMensal = salarioMensal * (1 + percentual / 100);
+    }
+    
+    // Sobrescrevendo o método mostrarDados para incluir informações específicas
+    @Override
+    public void mostrarDados() {
+        super.mostrarDados(); // Chama o método da classe pai
+        System.out.println("Tipo: Assalariado");
+        System.out.println("Salário Mensal: R$ " + String.format("%.2f", salarioMensal));
+        System.out.println("Pagamento: R$ " + String.format("%.2f", calcularSalario()));
+    }
+}
+
+// Classe FuncionarioHorista - herda de Funcionario
+class FuncionarioHorista extends Funcionario {
+    // Atributos específicos do funcionário horista
+    private double horasTrabalhadas;
+    private double valorHora;
+    
+    // Construtor - chama o construtor da classe pai e inicializa atributos específicos
+    public FuncionarioHorista(String nome, String cpf, String endereco, String telefone, 
+                            String setor, double horasTrabalhadas, double valorHora) {
+        super(nome, cpf, endereco, telefone, setor); // Chama construtor da classe pai
+        this.horasTrabalhadas = horasTrabalhadas;
+        this.valorHora = valorHora;
+    }
+    
+    // Getters e setters para encapsulamento
+    public double getHorasTrabalhadas() {
+        return horasTrabalhadas;
+    }
+    
+    public void setHorasTrabalhadas(double horasTrabalhadas) {
+        this.horasTrabalhadas = horasTrabalhadas;
+    }
+    
+    public double getValorHora() {
+        return valorHora;
+    }
+    
+    public void setValorHora(double valorHora) {
+        this.valorHora = valorHora;
+    }
+    
+    // Implementação do método abstrato - calcula salário como horas * valor da hora
+    @Override
+    public double calcularSalario() {
+        return horasTrabalhadas * valorHora;
+    }
+    
+    // Implementação do método abstrato - aplica aumento percentual no valor da hora
+    @Override
+    public void aplicarAumento(double percentual) {
+        // Aplica o aumento no valor da hora, não nas horas trabalhadas
+        valorHora = valorHora * (1 + percentual / 100);
+    }
+    
+    // Sobrescrevendo o método mostrarDados para incluir informações específicas
+    @Override
+    public void mostrarDados() {
+        super.mostrarDados(); // Chama o método da classe pai
+        System.out.println("Tipo: Horista");
+        System.out.println("Horas Trabalhadas: " + horasTrabalhadas);
+        System.out.println("Valor por Hora: R$ " + String.format("%.2f", valorHora));
+        System.out.println("Pagamento: R$ " + String.format("%.2f", calcularSalario()));
+    }
+}
